@@ -17,7 +17,10 @@ winCondition["win_6"] = [0, 0, 1, 0, 0, 1, 0, 0, 1];
 winCondition["win_7"] = [1, 0, 0, 0, 1, 0, 0, 0, 1];
 winCondition["win_8"] = [0, 0, 1, 0, 1, 0, 1, 0, 1];
 /*-----------------------------------*/
+<<<<<<< HEAD
 
+=======
+>>>>>>> x-1-branch
 document.getElementById('reset').addEventListener('click', function(){
     reset();
     isEnd = false;
