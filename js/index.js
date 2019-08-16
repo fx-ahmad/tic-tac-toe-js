@@ -5,6 +5,7 @@ var Owin = 0;
 var count = 0;
 var isEnd = false;
 var winCondition = {}
+var countModalDisplay = 0;
 
 /*---------- Win Condition ----------*/
 winCondition["win_1"] = [1, 1, 1, 0, 0, 0, 0, 0, 0];
@@ -25,7 +26,15 @@ var point = document.getElementsByTagName('li');
 for (let i = 0; i < 9; i++) {
     point[i].addEventListener('click', function () {
         if (isEnd) {
-            alert('game end, please restart');
+          render(modal({
+            display : 'block',
+            color : 'info',
+            message : 'End of Game, Please Restart'
+          }));
+          countModalDisplay += 1  ;
+          if(countModalDisplay > 0){
+            clearModal();
+          }
         } else {
             count++;
             if (count % 2 == 0) {
@@ -47,7 +56,11 @@ function isOwin(inGame) {
     for(let k = 1; k < 9; k++){
         if(inGame.every((value, index) => value === winCondition["win_"+k][index])){
             isEnd = true;
-            alert('O win the game');
+            render(modal({
+              display : 'block',
+              color : 'success',
+              message : 'O win The Game'
+            }));
             Owin += 1;
             document.getElementById('o_win').innerHTML = Owin
         }
@@ -57,7 +70,11 @@ function isXwin(inGame){
     for(let x = 1; x < 9; x++){
         if(inGame.every((value, index) => value === winCondition["win_"+x][index])){
             isEnd = true;
-            render(modal('block'));
+            render(modal({
+              display : 'block',
+              color : 'success',
+              message : 'X win The Game'
+            }));
             Xwin += 1;
             document.getElementById('x_win').innerHTML = Xwin;
         }
@@ -76,16 +93,21 @@ function reset() {
         point[i].classList.remove("disable");
         point[i].innerHTML = '+';
     }
+    clearModal();
 }
 
 function modal(prop){
   return(
-    `<div class="alert" style="display: ${prop};">
-        <button type="button" class="close">&times;</button>
-        <strong>Tic-tac-toe</strong> Best check yo self, you're not looking too good.
+    `<div class="alert alert-${prop.color}" style="display: ${prop.display};">
+        <strong>Tic-tac-toe</strong> ${prop.message}.
     </div>`
   )
 }
 function render(that){
     document.getElementById('alert').innerHTML += that;
+}
+
+function clearModal(){
+  var modal = document.getElementById('alert').firstElementChild;
+  modal.remove();
 }
