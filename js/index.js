@@ -90,4 +90,4 @@ function render(that){
     document.getElementById('alert').innerHTML += that;
 }
 
-render(modal('block'))
+render(modal('block'));
