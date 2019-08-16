@@ -78,5 +78,16 @@ function reset() {
     }
 }
 
+function modal(prop){
+  return(
+    `<div class="alert" style="display: ${prop};">
+        <button type="button" class="close">&times;</button>
+        <strong>Tic-tac-toe</strong> Best check yo self, you're not looking too good.
+    </div>`
+  )
+}
+function render(that){
+    document.getElementById('alert').innerHTML += that;
+}
 
-
+render(modal('block'))
