@@ -16,6 +16,7 @@ winCondition["win_5"] = [0, 0, 1, 0, 1, 0, 1, 0, 0];
 winCondition["win_6"] = [0, 0, 1, 0, 0, 1, 0, 0, 1];
 winCondition["win_7"] = [1, 0, 0, 0, 1, 0, 0, 0, 1];
 winCondition["win_8"] = [0, 0, 1, 0, 1, 0, 1, 0, 1];
+/*-----------------------------------*/
 
 document.getElementById('reset').addEventListener('click', function(){
     reset();
