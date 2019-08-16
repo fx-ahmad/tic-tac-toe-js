@@ -57,7 +57,7 @@ function isXwin(inGame){
     for(let x = 1; x < 9; x++){
         if(inGame.every((value, index) => value === winCondition["win_"+x][index])){
             isEnd = true;
-            alert('X win the game');
+            render(modal('block'));
             Xwin += 1;
             document.getElementById('x_win').innerHTML = Xwin;
         }
@@ -89,5 +89,3 @@ function modal(prop){
 function render(that){
     document.getElementById('alert').innerHTML += that;
 }
-
-render(modal('block'));
