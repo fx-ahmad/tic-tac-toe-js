@@ -74,6 +74,7 @@ for (let i = 0; i < 9; i++) {
                 Xpos[point[i].id] = 1;
                 checkXwin(Xpos);
             }
+            checkDraw();
         }
     })
 }
@@ -110,6 +111,14 @@ function checkXwin(arrCurrentPos){
             Xwin += 1;
             document.getElementById('x_win').innerHTML = Xwin;
         }
+    }
+}
+
+function checkDraw () {
+    var disabledBtn = document.getElementsByClassName("disable");
+    if (disabledBtn.length == Xpos.length || disabledBtn.length == Opos.length) {
+      isEnd = true;
+      showModal({ message : 'End of Game, Please Restart'});
     }
 }
 
