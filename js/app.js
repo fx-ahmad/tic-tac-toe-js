@@ -8,14 +8,46 @@ var winCondition = {}
 var countModalDisplay = 0;
 
 /*---------- Win Condition ----------*/
-winCondition["win_1"] = [1, 1, 1, 0, 0, 0, 0, 0, 0];
-winCondition["win_2"] = [0, 0, 0, 1, 1, 1, 0, 0, 0];
-winCondition["win_3"] = [0, 0, 0, 0, 0, 0, 1, 1, 1];
-winCondition["win_4"] = [1, 0, 0, 1, 0, 0, 1, 0, 0];
-winCondition["win_5"] = [0, 0, 1, 0, 1, 0, 1, 0, 0];
-winCondition["win_6"] = [0, 0, 1, 0, 0, 1, 0, 0, 1];
-winCondition["win_7"] = [1, 0, 0, 0, 1, 0, 0, 0, 1];
-winCondition["win_8"] = [0, 0, 1, 0, 1, 0, 1, 0, 1];
+winCondition["win_x0"] = [ 
+                            1, 1, 1, 
+                            0, 0, 0, 
+                            0, 0, 0
+                          ];
+winCondition["win_x1"] = [ 
+                            0, 0, 0, 
+                            1, 1, 1, 
+                            0, 0, 0
+                          ];
+winCondition["win_x2"] = [ 
+                            0, 0, 0, 
+                            0, 0, 0, 
+                            1, 1, 1
+                         ];
+winCondition["win_y0"] = [ 
+                            1, 0, 0, 
+                            1, 0, 0, 
+                            1, 0, 0
+                          ];
+winCondition["win_dl"] = [ 
+                            0, 0, 1, 
+                            0, 1, 0, 
+                            1, 0, 0
+                          ];
+winCondition["win_y2"] = [ 
+                            0, 0, 1, 
+                            0, 0, 1, 
+                            0, 0, 1
+                        ];
+winCondition["win_dr"] = [ 
+                            1, 0, 0, 
+                            0, 1, 0, 
+                            0, 0, 1
+                        ];
+winCondition["win_y1"] =  [ 
+                            0, 1, 0, 
+                            0, 1, 0, 
+                            0, 1, 0
+                          ];
 /*-----------------------------------*/
 
 document.getElementById('reset').addEventListener('click', function(){
@@ -42,20 +74,34 @@ for (let i = 0; i < 9; i++) {
                 document.getElementById(point[i].id).className += " disable o btn-primary";
                 document.getElementById(point[i].id).innerHTML = 'O';
                 Opos[point[i].id] = 1;
-                isOwin(Opos);
+                checkOwin(Opos);
             } else {
                 document.getElementById(point[i].id).className += " disable x btn-info";
                 document.getElementById(point[i].id).innerHTML = 'X';
                 Xpos[point[i].id] = 1;
-                isXwin(Xpos);
+                checkXwin(Xpos);
             }
         }
     })
 }
+function arraysEqual(a, b) {
+  if (a === b) return true;
+  if (a == null || b == null) return false;
+  if (a.length !== b.length) return false;
 
-function isOwin(inGame) {
-    for(let k = 1; k < 9; k++){
-        if(inGame.every((value, index) => value === winCondition["win_"+k][index])){
+  // If you don't care about the order of the elements inside
+  // the array, you should sort both arrays here.
+  // Please note that calling sort on an array will modify that array.
+  // you might want to clone your array first.
+
+  for (var i = 0; i < a.length; ++i) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
+}
+function checkOwin(arrCurrentPos) {
+    for (var k in winCondition) {
+        if(arraysEqual(arrCurrentPos, winCondition[k])){
             isEnd = true;
             render(modal({
               display : 'block',
@@ -67,9 +113,9 @@ function isOwin(inGame) {
         }
     }
 }
-function isXwin(inGame){
-    for(let x = 1; x < 9; x++){
-        if(inGame.every((value, index) => value === winCondition["win_"+x][index])){
+function checkXwin(arrCurrentPos){
+    for(var k in winCondition){
+        if(arraysEqual(arrCurrentPos, winCondition[k])){
             isEnd = true;
             render(modal({
               display : 'block',
