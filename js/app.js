@@ -2,10 +2,9 @@ var Xpos = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 var Opos = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 var Xwin = 0;
 var Owin = 0;
-var count = 0;
+var turn = 0;
 var isEnd = false;
 var winCondition = {}
-var countModalDisplay = 0;
 
 /*---------- Win Condition ----------*/
 winCondition["win_x0"] = [ 
@@ -57,26 +56,20 @@ document.getElementById('reset').addEventListener('click', function(){
 
 var point = document.getElementsByTagName('li');
 for (let i = 0; i < 9; i++) {
-    point[i].addEventListener('click', function () {
+    point[i].addEventListener('click', function (e) {
         if (isEnd) {
-          render(modal({
-            display : 'block',
-            color : 'info',
-            message : 'End of Game, Please Restart'
-          }));
-          countModalDisplay += 1  ;
-          if(countModalDisplay > 0){
-            clearModal();
-          }
+          showModal({ message : 'End of Game, Please Restart'});
         } else {
-            count++;
-            if (count % 2 == 0) {
-                document.getElementById(point[i].id).className += " disable o btn-primary";
+            turn++
+            if (turn % 2 == 0) {
+                if(e.target.classList.contains("disable")) return false;
+                document.getElementById(point[i].id).classList.add("disable", "o", "btn-primary");
                 document.getElementById(point[i].id).innerHTML = 'O';
                 Opos[point[i].id] = 1;
                 checkOwin(Opos);
             } else {
-                document.getElementById(point[i].id).className += " disable x btn-info";
+                if(e.target.classList.contains("disable")) return false;
+                document.getElementById(point[i].id).classList.add("disable", "x", "btn-info");
                 document.getElementById(point[i].id).innerHTML = 'X';
                 Xpos[point[i].id] = 1;
                 checkXwin(Xpos);
@@ -123,7 +116,7 @@ function checkXwin(arrCurrentPos){
 function reset() {
     Opos = [0, 0, 0, 0, 0, 0, 0, 0, 0];
     Xpos = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-    count = 0;
+    turn = 0;
     for (let i = 0; i < 9; i++) {
         point[i].classList.remove("btn-primary", "btn-info", "o", "x", "disable");
         point[i].innerHTML = '+';
@@ -140,5 +133,5 @@ function showModal(o){
 
 function clearModal(){
   var modal = document.getElementById('alert').firstElementChild;
-  modal.remove();
+  if (modal) modal.remove();
 }
