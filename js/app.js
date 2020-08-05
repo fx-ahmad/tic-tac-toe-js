@@ -125,11 +125,7 @@ function reset() {
     Xpos = [0, 0, 0, 0, 0, 0, 0, 0, 0];
     count = 0;
     for (let i = 0; i < 9; i++) {
-        point[i].classList.remove("btn-primary");
-        point[i].classList.remove("btn-info");
-        point[i].classList.remove("o");
-        point[i].classList.remove("x");
-        point[i].classList.remove("disable");
+        point[i].classList.remove("btn-primary", "btn-info", "o", "x", "disable");
         point[i].innerHTML = '+';
     }
     clearModal();
