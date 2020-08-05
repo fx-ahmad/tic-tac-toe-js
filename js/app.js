@@ -103,11 +103,7 @@ function checkOwin(arrCurrentPos) {
     for (var k in winCondition) {
         if(arraysEqual(arrCurrentPos, winCondition[k])){
             isEnd = true;
-            render(modal({
-              display : 'block',
-              color : 'success',
-              message : 'O win The Game'
-            }));
+            showModal({ message : 'O win The Game'});
             Owin += 1;
             document.getElementById('o_win').innerHTML = Owin
         }
@@ -117,11 +113,7 @@ function checkXwin(arrCurrentPos){
     for(var k in winCondition){
         if(arraysEqual(arrCurrentPos, winCondition[k])){
             isEnd = true;
-            render(modal({
-              display : 'block',
-              color : 'success',
-              message : 'X win The Game'
-            }));
+            showModal({ message : 'X win The Game' });
             Xwin += 1;
             document.getElementById('x_win').innerHTML = Xwin;
         }
@@ -143,15 +135,11 @@ function reset() {
     clearModal();
 }
 
-function modal(prop){
-  return(
-    `<div class="alert alert-${prop.color}" style="display: ${prop.display};">
-        <strong>Tic-tac-toe</strong> ${prop.message}.
-    </div>`
-  )
-}
-function render(that){
-    document.getElementById('alert').innerHTML += that;
+function showModal(o){
+  var ml = '<div class="alert alert-success">' + 
+              '<strong>Tic-tac-toe  </strong>' + o.message + 
+            '</div>'
+    document.getElementById('alert').innerHTML = ml;
 }
 
 function clearModal(){
