@@ -1,9 +1,18 @@
-var Xpos = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-var Opos = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+var Xpos = [
+            0, 0, 0, 
+            0, 0, 0, 
+            0, 0, 0
+          ];
+var Opos = [
+            0, 0, 0, 
+            0, 0, 0, 
+            0, 0, 0
+          ];
 var Xwin = 0;
 var Owin = 0;
 var turn = 0;
 var isEnd = false;
+var fieldLength = 9;
 var winCondition = {}
 
 /*---------- Win Condition ----------*/
@@ -55,8 +64,9 @@ document.getElementById('reset').addEventListener('click', function(){
 })
 
 var point = document.getElementsByTagName('li');
-for (let i = 0; i < 9; i++) {
-    point[i].addEventListener('click', function (e) {
+for (var i = 0; i < fieldLength; i++) {
+    (function(i){
+      point[i].addEventListener('click', function (e) {
         if (isEnd) {
           showModal({ message : 'End of Game, Please Restart'});
         } else {
@@ -76,26 +86,37 @@ for (let i = 0; i < 9; i++) {
             }
             checkDraw();
         }
-    })
+      })
+
+    })(i);
 }
-function arraysEqual(a, b) {
-  if (a === b) return true;
-  if (a == null || b == null) return false;
-  if (a.length !== b.length) return false;
-
-  // If you don't care about the order of the elements inside
-  // the array, you should sort both arrays here.
-  // Please note that calling sort on an array will modify that array.
-  // you might want to clone your array first.
-
-  for (var i = 0; i < a.length; ++i) {
-    if (a[i] !== b[i]) return false;
+function checkWinCondition(current, win) {
+  var win_pos = [];
+  var clicked_pos = [];
+  for (var i = 0; i < win.length; i++) {
+    if (win[i] == 1){
+      win_pos.push(i);
+    }
   }
-  return true;
+  for (var i = 0; i < current.length; i++) {
+    if (current[i] == 1)
+    clicked_pos.push(i);
+  }
+  var same_pos = 0;
+  for(var i = 0; i < clicked_pos.length; i++) {
+    if (win_pos.indexOf(clicked_pos[i]) !== -1) {
+      same_pos += 1;
+    }
+  }
+  if (same_pos >= 3) {
+    return true;
+  } else {
+    return false;
+  }
 }
 function checkOwin(arrCurrentPos) {
     for (var k in winCondition) {
-        if(arraysEqual(arrCurrentPos, winCondition[k])){
+        if(checkWinCondition(arrCurrentPos, winCondition[k])){
             isEnd = true;
             showModal({ message : 'O win The Game'});
             Owin += 1;
@@ -105,7 +126,7 @@ function checkOwin(arrCurrentPos) {
 }
 function checkXwin(arrCurrentPos){
     for(var k in winCondition){
-        if(arraysEqual(arrCurrentPos, winCondition[k])){
+        if(checkWinCondition(arrCurrentPos, winCondition[k])){
             isEnd = true;
             showModal({ message : 'X win The Game' });
             Xwin += 1;
@@ -116,7 +137,7 @@ function checkXwin(arrCurrentPos){
 
 function checkDraw () {
     var disabledBtn = document.getElementsByClassName("disable");
-    if (disabledBtn.length == Xpos.length || disabledBtn.length == Opos.length) {
+    if (disabledBtn.length == fieldLength) {
       isEnd = true;
       showModal({ message : 'End of Game, Please Restart'});
     }
