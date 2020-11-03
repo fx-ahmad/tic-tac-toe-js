@@ -70,6 +70,9 @@ for (var i = 0; i < fieldLength; i++) {
         if (isEnd) {
           showModal({ message : 'End of Game, Please Restart'});
         } else {
+          if (e.target.classList.contains("disable")) {
+            return false;
+          }
             turn++
             if (turn % 2 == 0) {
                 if(e.target.classList.contains("disable")) return false;
