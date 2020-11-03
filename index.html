@@ -5,39 +5,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Tic Tac Toe game</title>
-    <link rel='stylesheet prefetch' href='https://getbootstrap.com/2.3.2/assets/css/bootstrap.css'>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div id="alert"></div>
     <div id="tic-tac-toe">
-        <div class="span3 new_span">
-            <div class="row">
-                <h1 class="span3">Tic Tac Toe</h1>
-                <div class="span3">
-                    <div class="input-prepend input-append">
-                        <span class="add-on win_text">O won</span><strong id="o_win"
-                            class="win_times add-on">0</strong><span class="add-on">time(s)</span>
+        <div class="game-container">
+            <div class="game-info">
+                <h1 class="game-title">Tic Tac Toe</h1>
+                <div class="d-flex justify-content-between">
+                    <div class="win-info o">
+                        <span class="add-on win_text mx-05">O won</span>
+                        <strong id="o_win" class="win_times add-on">0</strong><span class="add-on mx-05">time(s)</span>
                     </div>
-                    <div class="input-prepend input-append">
-                        <span class="add-on win_text">X won</span><strong id="x_win"
-                            class="win_times add-on">0</strong><span class="add-on">time(s)</span>
+                    <div class="win-info x">
+                        <span class="add-on win_text mx-05">X won</span>
+                        <strong id="x_win" class="win_times add-on">0</strong><span class="add-on mx-05">time(s)</span>
                     </div>
                 </div>
             </div>
             <ul class="row" id="game">
-                <li id="0" class="btn span1">+</li>
-                <li id="1" class="btn span1">+</li>
-                <li id="2" class="btn span1">+</li>
-                <li id="3" class="btn span1">+</li>
-                <li id="4" class="btn span1">+</li>
-                <li id="5" class="btn span1">+</li>
-                <li id="6" class="btn span1">+</li>
-                <li id="7" class="btn span1">+</li>
-                <li id="8" class="btn span1">+</li>
+                <li id="0" class="btn">+</li>
+                <li id="1" class="btn">+</li>
+                <li id="2" class="btn">+</li>
+                <li id="3" class="btn">+</li>
+                <li id="4" class="btn">+</li>
+                <li id="5" class="btn">+</li>
+                <li id="6" class="btn">+</li>
+                <li id="7" class="btn">+</li>
+                <li id="8" class="btn">+</li>
             </ul>
-            <div class="clr">&nbsp;</div>
-            <div class="row"><a href="#" id="reset" class="btn-success btn span3">Restart</a></div>
+            <div class="d-flex justify-content-center">
+                <button type="button" id="reset" class="btn-success reset btn ">Restart</button>
+            </div>
         </div>
     </div>
     <script src="js/app.js"></script>
