@@ -42,6 +42,14 @@ class TicTacToe {
             this.showRestartButton();
         }
         this.playerTurn = this.changeTurn(this.playerTurn);
+        // this action maybe not here. will fix later
+        const currentPlayer = this.getPlayerInstance(this.playerTurn);
+        if (currentPlayer.isComputer) {
+            const computerPosition = currentPlayer.computerTurn(this.board);
+            setTimeout(() => {
+                this.clickCellByPosition(computerPosition);
+            }, 500);
+        }
     }
     doesPlayerWin(currentPlayer, board) {
         const checkHorizontal = (board, player) => {
@@ -104,6 +112,15 @@ class TicTacToe {
         el.classList.add("alert");
         el.innerHTML = message;
         container.appendChild(el);
+    }
+    getPlayerInstance(symbol) {
+        return symbol === this.playerX.symbol ? this.playerX : this.playerO;
+    }
+    clickCellByPosition(position) {
+        const row = position[0];
+        const col = position[1];
+        const cell = this.board.boardEls[row].childNodes[col];
+        cell.click();
     }
     render() {
         this.gameContainer.innerHTML = "";

@@ -96,4 +96,16 @@ export default class Board {
             });
         });
     }
+
+    getAvailablePositions() {
+        const availablePositions = [];
+        this.boardMap.forEach((row, rowIndex) => {
+            row.forEach((col, colIndex) => {
+                if (col === this.INACTIVE) {
+                    availablePositions.push([rowIndex, colIndex]);
+                }
+            });
+        });
+        return availablePositions;
+    }
 }

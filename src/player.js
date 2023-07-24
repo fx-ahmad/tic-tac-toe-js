@@ -6,7 +6,14 @@ export default class Player {
         this.positions = [];
     }
 
-    addPosition(position) {
-        this.positions.push(position);
+    // TODO: implement minimax algorithm
+    computerTurn(board) {
+        if (!this.isComputer) {
+            return;
+        }
+        const availablePositions = board.getAvailablePositions();
+        const randomIndex = Math.floor(Math.random() * availablePositions.length);
+        const randomPosition = availablePositions[randomIndex];
+        return randomPosition;
     }
 }
