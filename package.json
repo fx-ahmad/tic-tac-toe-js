@@ -2,9 +2,12 @@
   "name": "tic-tac-toe",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "source": "src/main.js",
+  "main": "dist/main.js",
+  "module": "dist/module.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "watch": "npx parcel watch && npx parcel serve dist/test.html",
+    "build": "npx parcel build"
   },
   "author": "fx-ahmad",
   "license": "MIT",
