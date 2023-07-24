@@ -1,9 +1,11 @@
 export default class Board {
-    constructor(size, bgBlack, bgWhite) {
+    constructor(cellSize, bgBlack, bgWhite, boardSize) {
+        this.boardSize = boardSize;
+        this.cellSize = cellSize;
         this.INACTIVE = 0;
         this.bgBlack = bgBlack;
         this.bgWhite = bgWhite;
-        this.boardMap = this.build2DArray(size.x, size.y);
+        this.boardMap = this.build2DArray(this.cellSize.x, this.cellSize.y);
         this.boardEls = this.buildElement(this.boardMap, this.bgBlack, this.bgWhite);
     }
     /**
@@ -50,6 +52,8 @@ export default class Board {
 
             row.forEach((col, colIndex) => {
                 const colEl = document.createElement("button");
+                colEl.style.width = this.boardSize.width / this.cellSize.x + "px";
+                colEl.style.height = this.boardSize.height / this.cellSize.y + "px";
                 colEl.setAttribute("type", "button");
                 colEl.classList.add("col");
                 colEl.classList.add("inactive");

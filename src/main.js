@@ -1,6 +1,6 @@
-import "./css/base.css";
 import Board from "./board";
 import Player from "./player";
+import cssText from 'bundle-text:./main.css';
 
 class TicTacToe {
     constructor(playerInstances, boardInstance) {
@@ -12,6 +12,13 @@ class TicTacToe {
     }
     setContainer(container) {
         this.gameContainer = container;
+
+        let style = document.createElement('style');
+        style.textContent = cssText;
+        this.gameContainer.insertAdjacentElement('beforebegin', style);
+
+        this.gameContainer.style.width = `${this.board.boardSize.width}px`;
+        this.gameContainer.style.height = `${this.board.boardSize.width}px`;
     }
     changeTurn (currentTurn) {
         return currentTurn === this.playerX.symbol ? this.playerO.symbol : this.playerX.symbol;
@@ -87,7 +94,7 @@ class TicTacToe {
         restartButton.innerHTML = "Restart";
         restartButton.addEventListener("click", () => {
             this.playerTurn = this.playerX.symbol;
-            this.board = new Board({ x: 3, y: 3 }, "#eee", "#fafafa");
+            this.board = new Board({ x: 3, y: 3 }, "#eee", "#fafafa", {width: this.board.boardSize.width, height: this.board.boardSize.height});
             this.render();
         });
         this.gameContainer.appendChild(restartButton);
@@ -107,4 +114,4 @@ class TicTacToe {
     }
 }
 
-export { TicTacToe, Board, Player }
+window.game = { TicTacToe, Board, Player }

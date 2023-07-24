@@ -4,14 +4,16 @@
   "description": "",
   "source": "src/main.js",
   "main": "dist/main.js",
-  "module": "dist/module.js",
   "scripts": {
-    "watch": "npx parcel watch && npx parcel serve dist/test.html",
+    "watch": "npx parcel watch",
+    "serve": "live-server dist",
     "build": "npx parcel build"
   },
   "author": "fx-ahmad",
   "license": "MIT",
   "devDependencies": {
+    "@babel/core": "^7.22.9",
+    "@parcel/transformer-inline-string": "^2.9.3",
     "parcel": "^2.9.3"
   }
 }
