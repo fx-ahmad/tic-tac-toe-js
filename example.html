@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe Examples</title>
+    <link rel="stylesheet" href="src/main.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            text-align: center;
+        }
+        .game-instance-container {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .game-instance-container h2 {
+            margin-top: 0;
+        }
+        /* Basic styling for multiple game containers if needed */
+        #ticTacToeContainer1, #ticTacToeContainer2 {
+            margin-bottom: 20px; /* Add some space between game boards if they are stacked */
+        }
+    </style>
+</head>
+<body>
+    <h1>Tic Tac Toe Game Instances</h1>
+
+    <div class="game-instance-container">
+        <h2>Game 1: Player vs. Computer (Default)</h2>
+        <div id="ticTacToeContainer1">
+            <!-- Tic Tac Toe game will be rendered here -->
+        </div>
+    </div>
+
+    <div class="game-instance-container">
+        <h2>Game 2: Human vs. Human (Custom Options)</h2>
+        <div id="ticTacToeContainer2">
+            <!-- Another Tic Tac Toe game will be rendered here -->
+        </div>
+    </div>
+
+    <script type="module" src="example.js"></script>
+</body>
+</html>

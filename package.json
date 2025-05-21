@@ -1,19 +1,8 @@
 {
   "name": "tic-tac-toe",
   "version": "0.1.0",
-  "description": "",
-  "source": "src/main.js",
-  "main": "dist/main.js",
-  "scripts": {
-    "watch": "npx parcel watch",
-    "serve": "live-server dist",
-    "build": "npx parcel build"
-  },
+  "description": "A Tic Tac Toe game library.",
+  "main": "src/main.js",
   "author": "fx-ahmad",
-  "license": "MIT",
-  "devDependencies": {
-    "@babel/core": "^7.22.9",
-    "@parcel/transformer-inline-string": "^2.9.3",
-    "parcel": "^2.9.3"
-  }
+  "license": "MIT"
 }
