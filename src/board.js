@@ -1,111 +1,74 @@
 export default class Board {
-    constructor(cellSize, bgBlack, bgWhite, boardSize) {
-        this.boardSize = boardSize;
-        this.cellSize = cellSize;
+    constructor(rows, cols) {
+        this.rows = rows;
+        this.cols = cols;
         this.INACTIVE = 0;
-        this.bgBlack = bgBlack;
-        this.bgWhite = bgWhite;
-        this.boardMap = this.build2DArray(this.cellSize.x, this.cellSize.y);
-        this.boardEls = this.buildElement(this.boardMap, this.bgBlack, this.bgWhite);
+        this.boardMap = this._initializeBoardMap();
     }
-    /**
-     * 
-     * @param {number} rows 
-     * @param {number} cols 
-     * @returns 2D array based on rows and cols
-     */
-    build2DArray(rows, cols, currRow = 0, currCol = 0, result = []) {
-        // enough rows, return the result
-        if (currRow == rows) {
-            return result;
+
+    _initializeBoardMap() {
+        const map = [];
+        for (let r = 0; r < this.rows; r++) {
+            map[r] = [];
+            for (let c = 0; c < this.cols; c++) {
+                map[r][c] = this.INACTIVE;
+            }
         }
+        return map;
+    }
 
-        // initialize the row
-        if (!result[currRow]) {
-            result[currRow] = [];
+    setCellValue(row, col, value) {
+        if (row >= 0 && row < this.rows && col >= 0 && col < this.cols) {
+            this.boardMap[row][col] = value;
+        } else {
+            console.error("Invalid cell coordinates for setCellValue:", row, col);
         }
+    }
 
-        // set the value
-        result[currRow][currCol] = this.INACTIVE;
-
-        // if we are at the end of the column, go to the next row
-        if (currCol === cols - 1) {
-            return this.build2DArray(rows, cols, currRow + 1, 0, result);
+    getCellValue(row, col) {
+        if (row >= 0 && row < this.rows && col >= 0 && col < this.cols) {
+            return this.boardMap[row][col];
         }
-
-        // else, go to the next column
-        return this.build2DArray(cols, rows, currRow, currCol + 1, result);
+        console.error("Invalid cell coordinates for getCellValue:", row, col);
+        return undefined;
     }
 
-    /**
-     * 
-     * @param {Array} _boardMap 2D array of the board
-     * @param {String} _bgWhite Hex color code for white
-     * @param {String} _bgBlack Hex color code for black
-     * @returns 2D array of the board elements
-     */
-
-    buildElement(_boardMap, _bgWhite, _bgBlack) {
-        const boardEls = _boardMap.map((row, rowIndex) => {
-            const rowEl = document.createElement("div");
-            rowEl.classList.add("row");
-
-            row.forEach((col, colIndex) => {
-                const colEl = document.createElement("button");
-                colEl.style.width = this.boardSize.width / this.cellSize.x + "px";
-                colEl.style.height = this.boardSize.height / this.cellSize.y + "px";
-                colEl.setAttribute("type", "button");
-                colEl.classList.add("col");
-                colEl.classList.add("inactive");
-                colEl.setAttribute("data-row", rowIndex);
-                colEl.setAttribute("data-col", colIndex);
-                colEl.style.backgroundColor =
-                    (rowIndex + colIndex) % 2 === 0 ? _bgWhite : _bgBlack;
-                colEl.innerHTML = col != 0 ? col : "";
-                rowEl.appendChild(colEl);
-            });
-
-            return rowEl;
-        });
-
-        return boardEls;
-    }
-
-    setCellListener(boardEls, listener) {
-        boardEls.forEach((row) => {
-            row.childNodes.forEach((col) => {
-                col.addEventListener("click", listener);
-            });
-        });
-    }
-
-    updateBoardMap(row, col, value) {
-        this.boardMap[row][col] = value;
-        this.boardEls = this.buildElement(this.boardMap, this.bgBlack, this.bgWhite)
-        this.logBoardMap()
-    }
-
-    logBoardMap() {
-        console.log(this.boardMap);
-    }
-
-    disableBoard() {
-        this.boardEls.forEach((row) => {
-            row.childNodes.forEach((col) => {
-                col.disabled = true;
-            });
-        });
+    isCellEmpty(row, col) {
+        if (row >= 0 && row < this.rows && col >= 0 && col < this.cols) {
+            return this.boardMap[row][col] === this.INACTIVE;
+        }
+        // Return true for out-of-bounds cells to prevent trying to place marks there,
+        // or handle as an error, depending on desired game logic.
+        // For now, logging error and returning true as if it's "empty" but unusable.
+        console.error("Invalid cell coordinates for isCellEmpty:", row, col);
+        return false; // Or true, depending on how external logic should treat out-of-bounds
     }
 
     getAvailablePositions() {
         const availablePositions = [];
-        this.boardMap.forEach((row, rowIndex) => {
-            row.forEach((col, colIndex) => {
-                if (col === this.INACTIVE) {
-                    availablePositions.push([rowIndex, colIndex]);
+        for (let r = 0; r < this.rows; r++) {
+            for (let c = 0; c < this.cols; c++) {
+                if (this.boardMap[r][c] === this.INACTIVE) {
+                    availablePositions.push([r, c]);
                 }
-            });
-        });
+            }
+        }
         return availablePositions;
+    }
+
+    getBoardMap() {
+        return this.boardMap;
+    }
+
+    getRows() {
+        return this.rows;
+    }
+
+    getCols() {
+        return this.cols;
+    }
+
+    logBoardMap() {
+        console.log(JSON.parse(JSON.stringify(this.boardMap)));
     }
 }
