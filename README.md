@@ -1,22 +1,117 @@
-# Tic-Tac-Toe Widget
+# Tic-Tac-Toe Game Widget
 
-Add tic tac toe game to your website with this simple widget. 
+This project provides a simple and embeddable Tic-Tac-Toe game widget for your website. Easily integrate a fun, interactive game for your users with minimal setup.
+
+## Features
+
+- **Customizable Board:** Easily configure the board size (e.g., 3x3, 4x4).
+- **Player Symbols:** Define custom symbols for players (e.g., X, O, or emojis).
+- **Color Themes:** Adapt the widget's appearance to your website's design with customizable colors for the board and lines.
+- **Easy Integration:** Embed the game with a few lines of JavaScript.
+- **Lightweight:** Minimal impact on page load times.
+
+## How to Play
+
+The game follows the standard Tic-Tac-Toe rules:
+
+1.  The game is played on a grid (typically 3x3).
+2.  One player is assigned a symbol (e.g., 'X') and the other is assigned another symbol (e.g., 'O').
+3.  Players take turns placing their symbols in empty cells on the grid.
+4.  The first player to get three of their symbols in a row (horizontally, vertically, or diagonally) wins the game.
+5.  If all cells are filled and no player has won, the game is a draw.
+
+To play using the widget:
+
+-   Simply click on an empty cell on the game board to place your symbol.
+-   The widget will automatically switch turns between players.
+-   The game will indicate when a player has won or if the game is a draw.
 
 ## Installation
 
-JS file can be downloaded from [here](https://devtest.my.id/downloads/tic-tac-toe.min.js)
+1.  Download the `tic-tac-toe.min.js` file from [here](https://devtest.my.id/downloads/tic-tac-toe.min.js).
+2.  Include the downloaded file in your HTML:
+    ```html
+    <script src="path/to/tic-tac-toe.min.js"></script>
+    ```
+    (Replace `path/to/` with the actual path to the file in your project).
 
 ## Usage
 
-```javascript
-        var game = new game.TicTacToe(
-            { x: new game.Player("X", false, 0), o: new game.Player("O", true, 0) },
-            new game.Board({ x: 3, y: 3 }, "#eee", "#fafafa", {width: 200, height: 200}),
-        );
+After including the script, you can initialize and render the game widget.
 
-        game.setContainer(document.getElementById("widget"));
-        game.render();
-```
+1.  **Add a container element to your HTML** where you want the game to appear:
+    ```html
+    <div id="tic-tac-toe-container"></div>
+    ```
+    You can style this container (e.g., set width and height) as needed.
+
+2.  **Add the following JavaScript code** in a `<script>` tag, preferably at the end of your `<body>` or by ensuring the DOM is fully loaded:
+
+    ```javascript
+    document.addEventListener('DOMContentLoaded', function() {
+        var gameContainer = document.getElementById("tic-tac-toe-container"); // Ensure this ID matches your HTML
+
+        if (gameContainer) {
+            var game = new game.TicTacToe(
+                { 
+                    x: new game.Player("X", false, 0), // Player X: Human-controlled
+                    o: new game.Player("O", true, 0)   // Player O: AI-controlled (set 'true' for AI)
+                },
+                new game.Board(
+                    { x: 3, y: 3 },      // Board size: 3 rows, 3 columns
+                    "#eee",              // Board background color
+                    "#ccc",              // Board lines color
+                    {width: 250, height: 250} // Widget dimensions in pixels
+                )
+            );
+
+            game.setContainer(gameContainer); // Assign the container
+            game.render();                    // Draw the game
+        } else {
+            console.error("Tic-Tac-Toe widget container not found! Please ensure an element with the ID 'tic-tac-toe-container' exists.");
+        }
+    });
+    ```
+
+    **Explanation of Parameters:**
+    -   `game.Player("SYMBOL", isAI, score)`: Creates a player.
+        -   `"SYMBOL"`: The character to use (e.g., "X", "O").
+        -   `isAI`: `true` if this player should be controlled by a simple AI, `false` for human control.
+        -   `score`: Initial score (typically 0).
+    -   `game.Board({x, y}, backgroundColor, lineColor, {width, height})`: Configures the board.
+        -   `{x, y}`: Number of cells horizontally and vertically.
+        -   `backgroundColor`: CSS color for the board background.
+        -   `lineColor`: CSS color for the grid lines.
+        -   `{width, height}`: Dimensions of the game widget.
 
 ## Demo
-Visit [this link](https://devtest.my.id/tic-tac-toe/) to see the demo. 
+Visit [this link](https://devtest.my.id/tic-tac-toe/) to see a live demo of the widget.
+
+## Contributing
+
+We welcome contributions to the Tic-Tac-Toe Game Widget! If you'd like to contribute, please follow these guidelines:
+
+**Reporting Bugs:**
+
+-   If you find a bug, please open an issue on the project's issue tracker.
+-   Describe the bug in detail, including steps to reproduce it, the expected behavior, and the actual behavior.
+-   Include screenshots or error messages if possible.
+
+**Submitting Pull Requests:**
+
+1.  Fork the repository.
+2.  Create a new branch for your feature or bug fix: `git checkout -b feature-name` or `git checkout -b bugfix-name`.
+3.  Make your changes and commit them with clear and concise messages.
+4.  Ensure your code adheres to the project's coding style (if specified).
+5.  Write unit tests for your changes if applicable.
+6.  Push your changes to your forked repository.
+7.  Open a pull request to the main repository's `main` or `master` branch.
+8.  Clearly describe the changes you've made in the pull request description.
+
+We appreciate your help in making this widget even better!
+
+## License
+
+Currently, this project does not have a specified license.
+
+It is recommended to add a license file (e.g., `LICENSE.md`) to the repository to clarify the terms under which the software can be used, modified, and distributed. Common open-source licenses include MIT, Apache 2.0, and GPL. Consider choosing one that fits your project's goals.
