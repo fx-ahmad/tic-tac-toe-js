@@ -5,11 +5,57 @@ import BoardRenderer from "./boardRenderer.js";
 import RandomMoveStrategy from "./RandomMoveStrategy.js";
 
 class TicTacToe {
-    constructor(playerX, playerO, board, uiManager) {
-        this.playerX = playerX;
-        this.playerO = playerO;
-        this.board = board; 
-        this.uiManager = uiManager;
+    constructor(options = {}) {
+        const {
+            containerElement,
+            boardRows = 3,
+            boardCols = 3,
+            playerXSymbol = 'X',
+            playerOSymbol = 'O',
+            playerXIsComputer = false,
+            playerOIsComputer = true,
+            playerXAIStrategy = null,
+            playerOAIStrategy = null, // Default handled below
+            boardCellBackgroundColorBlack = '#eee',
+            boardCellBackgroundColorWhite = '#fafafa',
+            boardPixelWidth = 300,
+            boardPixelHeight = 300
+        } = options;
+
+        if (!containerElement) {
+            throw new Error("containerElement is required when initializing TicTacToe.");
+        }
+
+        this.board = new Board(boardRows, boardCols);
+
+        let finalPlayerXAIStrategy = playerXAIStrategy;
+        if (playerXIsComputer && !finalPlayerXAIStrategy) {
+            finalPlayerXAIStrategy = new RandomMoveStrategy();
+        } else if (!playerXIsComputer) {
+            finalPlayerXAIStrategy = null;
+        }
+
+        let finalPlayerOAIStrategy = playerOAIStrategy;
+        if (playerOIsComputer && !finalPlayerOAIStrategy) {
+            finalPlayerOAIStrategy = new RandomMoveStrategy();
+        } else if (!playerOIsComputer) {
+            finalPlayerOAIStrategy = null;
+        }
+
+        this.playerX = new Player(playerXSymbol, playerXIsComputer, 0, finalPlayerXAIStrategy);
+        this.playerO = new Player(playerOSymbol, playerOIsComputer, 0, finalPlayerOAIStrategy);
+        
+        const boardRenderer = new BoardRenderer(
+            this.board,
+            containerElement,
+            boardCellBackgroundColorBlack,
+            boardCellBackgroundColorWhite,
+            { width: boardPixelWidth, height: boardPixelHeight }
+        );
+
+        this.uiManager = new UIManager(containerElement, boardRenderer);
+        this.uiManager.setupGameContainer(boardPixelWidth, boardPixelHeight);
+
         this.playerTurn = this.playerX.symbol;
         this.isProcessingClick = false;
     }
@@ -20,29 +66,10 @@ class TicTacToe {
         this.board = new Board(this.board.getRows(), this.board.getCols());
         this.playerTurn = this.playerX.symbol;
         this.uiManager.resetUI();
-        // BoardRenderer needs to be aware of the new board instance if it holds a direct reference
-        // that needs to be updated. Assuming BoardRenderer's render method uses the game's board instance
-        // or is updated separately.
-        // For now, let's assume UIManager or BoardRenderer is designed to work with the game's current board state.
-        // The BoardRenderer instance passed to UIManager is constructed with the initial boardData.
-        // If TicTacToe creates a *new* Board object, BoardRenderer might be looking at an old one.
-        // This needs careful handling.
-        // Solution: BoardRenderer should perhaps take a getter function for the board,
-        // or TicTacToe should update the BoardRenderer's internal board reference.
-        // For this step, we follow the prompt, but this is a potential refactor point.
-        // Let's assume BoardRenderer's render method uses the board passed at construction,
-        // so we must update its internal reference or make it use the game's board.
-        // The current BoardRenderer is built with a specific board instance.
-        // We need to ensure the renderer is using the *active* board.
-        // Simplest for now: UIManager's renderBoard could implicitly use this.board from TicTacToe
-        // if UIManager has a reference to TicTacToe, or BoardRenderer is updated.
-        // The provided UIManager.renderBoard() calls this.boardRenderer.render().
-        // The BoardRenderer.render() uses this.board.getCellValue().
-        // So, the Board instance in BoardRenderer must be the same as in TicTacToe.
-        // One way: Update BoardRenderer's board.
+        // Ensure the renderer is using the *active* board.
         this.uiManager.boardRenderer.board = this.board; // Make BoardRenderer use the new board.
 
-        this.uiManager.renderBoard(); 
+        this.uiManager.renderBoard();
         this.uiManager.enableBoardInteraction();
         this.uiManager.setBoardCellClickListener(this.onCellClick.bind(this));
 
@@ -164,71 +191,45 @@ class TicTacToe {
 
     doesTie(board) {
         // Tie if no available positions and no player has won
-        return board.getAvailablePositions().length === 0 && 
-               !this.doesPlayerWin(this.playerX.symbol, board) && 
+        return board.getAvailablePositions().length === 0 &&
+               !this.doesPlayerWin(this.playerX.symbol, board) &&
                !this.doesPlayerWin(this.playerO.symbol, board);
+    }
+
+    destroy() {
+        // 1. Disable Board Interaction (disables cell buttons)
+        if (this.uiManager && this.uiManager.boardRenderer) {
+            this.uiManager.disableBoardInteraction(); // Disables buttons
+        }
+
+        // 2. Clear Board Click Listeners
+        // BoardRenderer.removeCellClickListeners uses cloning to remove listeners
+        if (this.uiManager && this.uiManager.boardRenderer) {
+            this.uiManager.boardRenderer.removeCellClickListeners();
+        }
+
+        // 3. & 4. Clear UIManager's specific UI elements (message, restart button)
+        // UIManager.destroyUI handles removing these elements and their listeners
+        if (this.uiManager) {
+            this.uiManager.destroyUI();
+        }
+
+        // 5. Clear Board DOM from its container
+        if (this.uiManager && this.uiManager.boardRenderer && this.uiManager.boardRenderer.boardDOMContainer) {
+            this.uiManager.boardRenderer.boardDOMContainer.innerHTML = '';
+        }
+
+        // 6. Nullify References
+        this.board = null;
+        this.playerX = null;
+        this.playerO = null;
+        this.uiManager = null; // Includes boardRenderer through UIManager
+        this.playerTurn = null;
+        this.isProcessingClick = false; // Reset state
+
+        // Optional: Log destruction
+        console.log("TicTacToe instance destroyed.");
     }
 }
 
 export default TicTacToe;
-
-document.addEventListener('DOMContentLoaded', () => {
-    const gameContainerId = 'tic-tac-toe-container';
-    const gameContainer = document.getElementById(gameContainerId);
-
-    if (!gameContainer) {
-        console.error(`HTML element with ID '${gameContainerId}' not found. Game cannot start.`);
-        return;
-    }
-
-    // Game Configuration
-    const boardRows = 3;
-    const boardCols = 3;
-    const boardCellBackgroundColorBlack = '#eee'; // Example color
-    const boardCellBackgroundColorWhite = '#fafafa'; // Example color
-    const boardPixelWidth = 300;
-    const boardPixelHeight = 300;
-
-    // 1. Create Board (Initial Data/Configuration Carrier)
-    const initialBoardData = new Board(boardRows, boardCols);
-
-    // 2. Create BoardRenderer
-    const boardRenderer = new BoardRenderer(
-        initialBoardData, // Will be replaced by the game's board in TicTacToe.startGame
-        gameContainer,
-        boardCellBackgroundColorBlack,
-        boardCellBackgroundColorWhite,
-        { width: boardPixelWidth, height: boardPixelHeight }
-    );
-
-    // 3. Create AI Strategy
-    const computerAI = new RandomMoveStrategy();
-
-    // 4. Create Players
-    const playerX = new Player('X', false, 0, null); 
-    const playerO = new Player('O', true, 0, computerAI); 
-
-    // 5. Create UIManager
-    const uiManager = new UIManager(gameContainer, boardRenderer);
-
-    // 6. Create TicTacToe Game Instance
-    // The 'initialBoardData' is passed here, TicTacToe's startGame will create its own internal board
-    // but uses dimensions from this initial one. And we updated startGame to link the new board to the renderer.
-    const ticTacToeGame = new TicTacToe(playerX, playerO, initialBoardData, uiManager);
-
-    // 7. Setup the overall game container dimensions via UIManager
-    uiManager.setupGameContainer(boardPixelWidth, boardPixelHeight);
-
-    // 8. Start the Game
-    ticTacToeGame.startGame();
-
-    // 9. Optional: Expose to window for debugging
-    window.game = {
-        ticTacToeInstance: ticTacToeGame,
-        Board,
-        Player,
-        UIManager,
-        BoardRenderer,
-        RandomMoveStrategy
-    };
-});

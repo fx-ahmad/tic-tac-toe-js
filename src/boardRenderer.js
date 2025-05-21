@@ -118,4 +118,17 @@ export default class BoardRenderer {
             cellEl.disabled = false;
         });
     }
+
+    removeCellClickListeners() {
+        this.cellElements.forEach(cellEl => {
+            // Cloning the node and replacing it is a common way to remove all event listeners
+            const newCellEl = cellEl.cloneNode(true);
+            cellEl.parentNode.replaceChild(newCellEl, cellEl);
+        });
+        // After cloning, the this.cellElements array holds references to the old nodes
+        // We need to update this.cellElements to reference the new nodes if we want to interact with them later
+        // However, for a destroy method, this might not be necessary as the board will be cleared.
+        // For robustness, let's re-query them, or clear the array if the DOM is about to be wiped.
+        // Since boardDOMContainer.innerHTML = '' will be called, just ensuring listeners are gone is key.
+    }
 }

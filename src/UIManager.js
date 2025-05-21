@@ -75,4 +75,19 @@ export default class UIManager {
         this.hideMessage();
         this.hideRestartButton();
     }
+
+    destroyUI() {
+        // Remove message element if it exists
+        if (this.messageElement) {
+            this.messageElement.remove();
+            this.messageElement = null;
+        }
+        // Remove restart button if it exists
+        if (this.restartButton) {
+            this.restartButton.remove(); // This also removes its event listeners
+            this.restartButton = null;
+        }
+        // Note: BoardRenderer's DOM container cleanup will be handled separately
+        // by TicTacToe.destroy calling boardDOMContainer.innerHTML = ''
+    }
 }
